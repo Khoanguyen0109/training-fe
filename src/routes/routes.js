@@ -8,11 +8,11 @@ import UsersConfig from "../modules/Users/UsersConfig";
 import { generateRoutesFromConfigs } from "./helpers";
 
 const routeConfig = [
-  ...DashboardConfig,
-  ...LoginConfig,
-  ...ProjectsConfig,
-  ...UsersConfig,
-  ...ErrorPageConfig,
+  DashboardConfig,
+  LoginConfig,
+  ProjectsConfig,
+  UsersConfig,
+  ErrorPageConfig,
 ];
 
 const routes = [

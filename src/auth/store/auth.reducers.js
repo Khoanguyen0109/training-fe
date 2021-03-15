@@ -3,7 +3,7 @@ import * as AuthActions from "./auth.action";
 const initialState = {
   user: {},
   token: null,
-  role: null,
+  role: "ADMIN",
 };
 
 const authReducer = (state = initialState, action) => {

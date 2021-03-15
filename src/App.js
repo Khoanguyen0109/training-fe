@@ -1,33 +1,39 @@
 import { ThemeProvider } from "@material-ui/styles";
 import React from "react";
-import { Provider, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Auth from "./auth/Auth";
 import { theme } from "./utils/theme/theme";
+import routes from "./routes/routes";
+import Authorization from "./auth/Authorization";
+import { BrowserRouter as Router } from "react-router-dom";
+import Layout from "./layout/Layout";
+import AppContext from "./AppContex";
+import { renderRoutes } from "react-router-config";
 
 function App() {
   const user = useSelector((state) => state.auth);
-  console.log("user :>> ", user);
+  console.log("routes", routes);
   return (
-    <ThemeProvider theme={theme}>
-      <Auth>
-        <div className="App">
-          <header className="App-header">
-            <img src="" className="App-logo" alt="logo" />
-            <p>
-              Edit <code>src/App.js</code> and save to reload.
-            </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-          </header>
-        </div>
-      </Auth>
-    </ThemeProvider>
+    <AppContext.Provider
+      value={{
+        routes,
+      }}
+    >
+      <ThemeProvider theme={theme}>
+        <Auth>
+          <Router>
+            <Authorization>
+              <AppContext.Consumer>
+                {({ routes }) => {
+                  console.log("routes", routes);
+                  return <>{renderRoutes(routes)}</>;
+                }}
+              </AppContext.Consumer>{" "}
+            </Authorization>
+          </Router>
+        </Auth>
+      </ThemeProvider>
+    </AppContext.Provider>
   );
 }
 

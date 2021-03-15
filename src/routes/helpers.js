@@ -1,7 +1,7 @@
 export function generateRoutesFromConfigs(configs, auth) {
   let allRoutes = [];
   configs.forEach((config) => {
-    allRoutes = [...allRoutes, ...this.setRoutes(config, auth)];
+    allRoutes = [...allRoutes, ...setRoutes(config, auth)];
   });
   return allRoutes;
 }
@@ -22,3 +22,5 @@ export function setRoutes(config, defaultAuth) {
 
   return [...routes];
 }
+
+export function getNavigation(routes, auth) {}

@@ -7,6 +7,7 @@ const LoginConfig = {
       component: Login,
     },
   ],
+  auth: [],
 };
 
 export default LoginConfig;
