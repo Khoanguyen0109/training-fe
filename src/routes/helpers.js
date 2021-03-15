@@ -22,5 +22,3 @@ export function setRoutes(config, defaultAuth) {
 
   return [...routes];
 }
-
-export function getNavigation(routes, auth) {}
