@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Splash from "../layout/Splash";
 
-function Auth() {
-  const [waitToCheck, setWaitToCheck] = useState(false);
+function Auth({ children }) {
+  const [waitToCheck, setWaitToCheck] = useState(true);
 
-  return <div></div>;
+  useEffect(() => {
+    Promise.all([jwtCheck(), authOCheck()]).then(setWaitToCheck(false));
+  });
+
+  async function authOCheck() {
+    return;
+  }
+  async function jwtCheck() {
+    console.log("jwtCheck :>> ");
+    return;
+  }
+  return waitToCheck ? <Splash /> : <> {children}</>;
 }
 
 export default Auth;

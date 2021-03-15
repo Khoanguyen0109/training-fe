@@ -37,3 +37,5 @@ class EventEmitter {
     this._getEventListByName(eventName).delete(fn);
   }
 }
+
+export default EventEmitter;

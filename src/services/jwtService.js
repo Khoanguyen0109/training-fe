@@ -1,9 +1,9 @@
-import FuseUtils from "@fuse/utils/FuseUtils";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import EventEmitter from "./EventEmiter";
 /* eslint-disable camelcase */
 
-class JwtService extends FuseUtils.EventEmitter {
+class JwtService extends EventEmitter {
   init() {
     this.setInterceptors();
     this.handleAuthentication();
@@ -44,7 +44,7 @@ class JwtService extends FuseUtils.EventEmitter {
       this.setSession(access_token);
       this.emit("onAutoLogin", true);
     } else {
-      this.setSession(null);
+      this.logout();
       this.emit("onAutoLogout", "access_token expired");
     }
   };

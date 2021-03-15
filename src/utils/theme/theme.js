@@ -1,14 +1,14 @@
 import { createMuiTheme } from "@material-ui/core";
 
 export const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: "",
-    },
-    secondary: {
-      main: "",
-    },
-  },
+  // palette: {
+  //   primary: {
+  //     main: "",
+  //   },
+  //   secondary: {
+  //     main: "",
+  //   },
+  // },
   typography: {
     fontFamily: "Raleway, Arial",
   },

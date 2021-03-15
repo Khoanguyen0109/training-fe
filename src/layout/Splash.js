@@ -1,7 +1,7 @@
 import React from "react";
 
-function Slpash() {
-  return <div></div>;
+function Splash() {
+  return <div>Splash Screen</div>;
 }
 
-export default Slpash;
+export default Splash;
