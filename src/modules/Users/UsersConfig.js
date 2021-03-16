@@ -9,15 +9,15 @@ const UsersConfig = {
       path: defaultRoute,
       // component: React.lazy(() => import("./Users")),
       component: Users,
+      menu: {
+        title: "Users",
+        path: defaultRoute,
+        icon: "",
+        order: 3,
+      },
     },
   ],
   auth: [roles.ADMIN],
-  menu: {
-    title: "Project",
-    path: defaultRoute,
-    icon: "",
-    order: 3,
-  },
 };
 
 export default UsersConfig;

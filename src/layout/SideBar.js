@@ -10,6 +10,10 @@ import clsx from "clsx";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { DRAWER_WIDTH } from "./config";
 import { useSelector } from "react-redux";
+import routes from "../routes/routes";
+import Item from "./Item";
+import hasPermission from "../auth/hasPermission";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
@@ -43,10 +47,27 @@ const useStyles = makeStyles((theme) => ({
 
 function SideBar(props) {
   const classes = useStyles();
+  const history = useHistory();
 
-  const currentUser = useSelector((state) => state.auth.role);
-  function getNavigation(routes) {}
+  const currentUser = useSelector((state) => state.auth);
+  const menus = () => {
+    const menus = routes.filter(
+      (route) => !!route.menu && hasPermission(route.auth, currentUser.role)
+    );
+    const orderedItems = menus.sort((a, b) => {
+      const orderA = a.menu?.order;
+      const orderB = b.menu?.order;
+      if (orderA && orderB) {
+        return orderA - orderB;
+      }
+      return a - b;
+    });
+    return orderedItems;
+  };
 
+  const handleClick = (path) => {
+    history.push(path);
+  };
   return (
     <Drawer
       variant="permanent"
@@ -64,9 +85,16 @@ function SideBar(props) {
         </IconButton>
       </div>
       <Divider />
-      <List>mainListItems</List>
+      <List>
+        {menus().map((item, index) => (
+          <Item
+            title={item.menu.title}
+            path={item.menu.path}
+            onClick={handleClick}
+          ></Item>
+        ))}
+      </List>
       <Divider />
-      <List>secondaryListItems</List>
     </Drawer>
   );
 }

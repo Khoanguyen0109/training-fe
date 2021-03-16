@@ -1,6 +1,16 @@
-import { Button, makeStyles, TableCell, TableRow } from "@material-ui/core";
-import React from "react";
-import DeleteButton from "../buttons/DeleteButton";
+import {
+  Button,
+  Icon,
+  IconButton,
+  makeStyles,
+  TableCell,
+  TableRow,
+} from "@material-ui/core";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { Action } from "rxjs/internal/scheduler/Action";
+import hasPermission from "../../auth/hasPermission";
+import ConfirmDialog from "../CofirmDialog/ConfirmDialog";
 import Cell from "./Cell";
 
 const useStyles = makeStyles({
@@ -13,34 +23,56 @@ const useStyles = makeStyles({
 });
 
 function Row(props) {
-  const { rowId, row, onDelete, onEdit, onSave } = props;
+  const { rowId, row, onRowClick, deleteAction } = props;
   const classes = useStyles();
-  console.log("row", row);
+  const currentUser = useSelector(({ auth }) => auth.user);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  function handleOpenDeleteConfirm(e) {
+    setOpenDelete(!openDelete);
+  }
+
+  async function handleDelete() {
+    await deleteAction();
+    setOpenDelete(false);
+  }
+
   return (
     <>
-      <TableRow className={classes.row}>
+      <TableRow onClick={(e) => onRowClick(rowId)} className={classes.row}>
         {row.map(
           (cell, index) =>
-            cell.sort && (
-              <Cell
-                key={index}
-                rowId={rowId}
-                cell={cell}
-                onEdit={onEdit}
-                onSave={onSave}
-              />
-            )
+            cell.sort && <Cell key={index} rowId={rowId} cell={cell} />
+        )}
+        {hasPermission(row.auth, currentUser.role) && (
+          <TableCell
+            component="th"
+            scope="row"
+            align="center"
+            className={classes.deleteCell}
+          >
+            <IconButton
+              onClick={(ev) => {
+                ev.stopPropagation();
+                handleOpenDeleteConfirm(ev);
+              }}
+            >
+              <Icon>delete</Icon>
+            </IconButton>
+          </TableCell>
         )}
         <TableCell className={classes.deleteCell}>
-          <Button
-            onClick={() => {
-              onDelete(rowId);
-            }}
-          >
-            <DeleteButton />
-          </Button>
+          <Button>Delete</Button>
         </TableCell>
       </TableRow>
+      <ConfirmDialog
+        id={row.id}
+        title="Are you sure to Delete this?"
+        messages=""
+        open={openDelete}
+        handleClose={handleOpenDeleteConfirm}
+        confirmFunction={handleDelete}
+      />
     </>
   );
 }

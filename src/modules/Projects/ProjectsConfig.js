@@ -10,9 +10,16 @@ const ProjectsConfig = {
       path: defaultRoute,
       // component: React.lazy(() => import("./Projects")),
       component: Projects,
+      menu: {
+        title: "Project",
+        path: defaultRoute,
+        icon: "",
+        order: 2,
+      },
+      exact: true,
     },
     {
-      path: `${defaultRoute}/:projectId`,
+      path: `${defaultRoute}/1`,
       // component: React.lazy(() => import("./ProjectInfo")),
       component: ProjectInfo,
     },
@@ -22,12 +29,6 @@ const ProjectsConfig = {
       component: Task,
     },
   ],
-  menu: {
-    title: "Project",
-    path: defaultRoute,
-    icon: "",
-    order: 2,
-  },
 };
 
 export default ProjectsConfig;

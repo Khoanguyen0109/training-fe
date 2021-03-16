@@ -9,14 +9,14 @@ const DashboardConfig = {
       // component: React.lazy(() => import("./Dashboard")),
       component: Dashboard,
       exact: true,
+      menu: {
+        title: "Dashboard",
+        path: defaultRoute,
+        icon: "",
+        order: 1,
+      },
     },
   ],
-  menu: {
-    title: "Dashboard",
-    path: defaultRoute,
-    icon: "",
-    order: 1,
-  },
 };
 
 export default DashboardConfig;

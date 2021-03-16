@@ -6,15 +6,18 @@ import {
   makeStyles,
   Button,
   Typography,
+  TextField,
+  TablePagination,
 } from "@material-ui/core";
-import React, { useMemo, useState } from "react";
+import _ from "lodash";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import Row from "./Row";
+import { createColumns } from "./createColumns";
 import TableHeader from "./TableHeader";
-import { ToastContainer, toast } from "react-toastify";
-import { creatColumns } from "../../utils/createColumns";
-import { columns } from "./columns";
-import { saveGrades, SAVE_GRADES } from "../../redux/actions/grade.action";
+import { ref } from "yup";
+import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
+import Form from "../Form/Form";
 
 const useStyles = makeStyles({
   table: {
@@ -29,116 +32,132 @@ const useStyles = makeStyles({
 });
 
 function DataTable(props) {
-  const { headers, rows, action } = props;
+  const {
+    headers,
+    rows,
+    filterSearch,
+    onRowClick,
+    deleteAction,
+    addAction,
+    columns,
+  } = props;
   const classes = useStyles();
-  const [tableRows, setTableRows] = useState(rows);
-  const [message, setMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
-  const total = useMemo(
-    () =>
-      tableRows.reduce((total, obj) => parseFloat(obj?.weight || 0) + total, 0),
-    [tableRows]
-  );
+  const tableRef = useRef(null);
 
-  function onAdd() {
-    if (
-      tableRows.length > 0 &&
-      (!tableRows[tableRows.length - 1].name ||
-        !tableRows[tableRows.length - 1].type)
-    ) {
-      return;
-    }
-    setTableRows(() => [
-      ...tableRows,
-      {
-        id: tableRows[tableRows.length - 1]?.id + 1 || 1,
-        name: "",
-        type: "",
-        weight: 100 - total < 0 ? 0 : 100 - total,
-      },
-    ]);
+  const [filter, setFilter] = useState(rows);
+  const [searchText, setSearchText] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [order, setOrder] = useState({
+    direction: "asc",
+    id: null,
+  });
+
+  const [openAddForm, setOpenAddForm] = useState(false);
+  function handleOpenAddForm() {
+    setOpenAddForm(!openAddForm);
   }
 
-  function onEdit(id, key, data) {
-    const editIndex = tableRows.findIndex((row) => row.id === id);
-    setTableRows(
-      [...tableRows].map((row) => {
-        if (row.id === id) {
-          return {
-            ...row,
-            [key]: data,
-          };
-        }
-        return row;
-      })
-    );
-  }
-
-  function onDelete(id) {
-    setTableRows(() => tableRows.filter((row) => row.id !== id));
-    onSave();
-  }
-
-  function onSave() {
-    if (checkAllFilled() || total > 100) {
-      return;
-    } else if (checkDuplicate()) {
+  useEffect(() => {
+    if (searchText.length !== 0) {
+      setFilter(_.filter(rows, (item) => filterSearch(item)));
     } else {
-      dispatch(action(tableRows));
+      setFilter(rows);
     }
+  }, [rows, searchText]);
+
+  /// Table Function
+  function scrollToView() {
+    tableRef.current.scrollIntoView();
   }
 
-  function checkDuplicate() {
-    return (
-      new Set([...tableRows].map((row) => row.name)).size !==
-      [...tableRows].map((row) => row.name).length
-    );
+  function handleRequestSort(event, property) {
+    const id = property;
+    let direction = "desc";
+    if (order.id === property && order.direction === "desc") {
+      direction = "asc";
+    }
+    setOrder({
+      direction,
+      id,
+    });
   }
-  function checkAllFilled() {
-    return tableRows.find((row) => !row.name || !row.type || row.weight === "");
+
+  function handleChangePage(event, value) {
+    setPage(value);
+    scrollToView();
+  }
+
+  function handleChangeRowsPerPage(event) {
+    setRowsPerPage(event.target.value);
+    scrollToView();
   }
 
   return (
     <>
-      <TableContainer
-        component={Paper}
-        onClickAway={() => console.log(" clecik âsasdasd")}
-      >
+      <div>
+        <TextField
+          id=""
+          label="Search"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          variant="outlined"
+          autoComplete
+        />{" "}
+        <Button onClick={handleOpenAddForm}>Add</Button>
+      </div>
+      <Form
+        open={openAddForm}
+        handleOpen={handleOpenAddForm}
+        columns={columns}
+        saveAction={addAction}
+      />
+
+      <TableContainer ref={tableRef} component={Paper}>
         <Table className={classes.table} aria-label="simple table">
-          <TableHeader headers={headers} />
+          <TableHeader
+            headers={columns}
+            order={order}
+            onRequestSort={handleRequestSort}
+            rowCount={filter.length}
+          />
           <TableBody>
-            {tableRows.map((row, index) => {
-              const rowData = creatColumns(columns, row);
-              return (
-                <Row
-                  key={index}
-                  id={index}
-                  rowId={row.id}
-                  row={rowData}
-                  onDelete={onDelete}
-                  onEdit={onEdit}
-                  onSave={onSave}
-                />
-              );
-            })}
+            {_.orderBy(filter, [headers], [order.direction])
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => {
+                const rowData = createColumns(columns, row);
+                return (
+                  <Row
+                    key={row.id}
+                    rowId={row.id}
+                    row={rowData}
+                    onRowClick={onRowClick}
+                    deleteAction={deleteAction}
+                  />
+                );
+              })}
           </TableBody>
         </Table>
+        <TablePagination
+          component="div"
+          count={filter.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          backIconButtonProps={{
+            "aria-label": "Previous Page",
+          }}
+          nextIconButtonProps={{
+            "aria-label": "Next Page",
+          }}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+          ActionsComponent={TablePaginationActions}
+        />
       </TableContainer>
-      <Button onClick={onAdd}>Add</Button>
-      <Button onClick={onSave}>Save</Button>
-      <Typography className={total > 100 ? classes.error : ""}>
-        {total?.toFixed(2)}
-      </Typography>
     </>
   );
 }
-
-// DataTable.defaultProps ={
-//   // editable:true,
-//   headers:[],
-//   data:[],
-// }
 
 export default DataTable;
