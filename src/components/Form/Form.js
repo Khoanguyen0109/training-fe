@@ -39,59 +39,47 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Form(props) {
-  const { open, title, handleOpen, columns, saveAction, values } = props;
+  const { columns, saveAction, cancelAction, values } = props;
 
   const classes = useStyles();
   const formik = useFormik({
     initialValues: values || createDefaultValue(columns),
     onSubmit: (values, { setSubmitting, resetForm }) => {
       console.log(`values`, values);
-      handleOpen();
+      //   handleOpen();
       resetForm(values || createDefaultValue(columns));
 
-      //   saveAction(values);
+      saveAction(values);
     },
     validationSchema: yup.object(createValidateSchema(columns)),
   });
   return (
-    <Dialog
-      open={open}
-      onClose={handleOpen}
-      aria-labelledby="draggable-dialog-title"
-    >
-      <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-        {title}
-      </DialogTitle>
-      <DialogContent className={classes.content}>
-        <form className={classes.content} onSubmit={formik.handleSubmit}>
-          {columns.map((col) => (
-            <TextField
-              id={col.id}
-              label={col.header}
-              name={col.id}
-              value={formik.values[col.id]}
-              onChange={formik.handleChange}
-              error={formik.touched[col.id] && Boolean(formik.errors[col.id])}
-              helperText={formik.touched[col.id] && formik.errors[col.id]}
-            >
-              {col.type === "select" &&
-                col?.options.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-            </TextField>
-          ))}
-          <Button autoFocus onClick={handleOpen} color="primary">
-            Cancel
-          </Button>
-          <Button type="submit" color="primary">
-            Subscribe
-          </Button>
-        </form>
-      </DialogContent>
-      <DialogActions></DialogActions>
-    </Dialog>
+    <form className={classes.content} onSubmit={formik.handleSubmit}>
+      {columns.map((col) => (
+        <TextField
+          id={col.id}
+          label={col.header}
+          name={col.id}
+          value={formik.values[col.id]}
+          onChange={formik.handleChange}
+          error={formik.touched[col.id] && Boolean(formik.errors[col.id])}
+          helperText={formik.touched[col.id] && formik.errors[col.id]}
+        >
+          {col.type === "select" &&
+            col?.options.map((option) => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+        </TextField>
+      ))}
+      <Button autoFocus onClick={cancelAction} color="primary">
+        Cancel
+      </Button>
+      <Button type="submit" color="primary">
+        Subscribe
+      </Button>
+    </form>
   );
 }
 
