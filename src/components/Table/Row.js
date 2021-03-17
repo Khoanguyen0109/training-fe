@@ -42,7 +42,7 @@ function Row(props) {
       <TableRow onClick={(e) => onRowClick(rowId)} className={classes.row}>
         {row.map(
           (cell, index) =>
-            cell.sort && <Cell key={index} rowId={rowId} cell={cell} />
+            cell.tableRender && <Cell key={index} rowId={rowId} cell={cell} />
         )}
         {hasPermission(row.auth, currentUser.role) && (
           <TableCell

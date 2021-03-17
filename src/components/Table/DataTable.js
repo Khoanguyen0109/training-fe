@@ -18,6 +18,7 @@ import TableHeader from "./TableHeader";
 import { ref } from "yup";
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import Form from "../Form/Form";
+import FormDialog from "../Dialog/FormDialog";
 
 const useStyles = makeStyles({
   table: {
@@ -68,6 +69,10 @@ function DataTable(props) {
     }
   }, [rows, searchText]);
 
+
+  /// FormAction
+
+
   /// Table Function
   function scrollToView() {
     tableRef.current.scrollIntoView();
@@ -95,6 +100,7 @@ function DataTable(props) {
     scrollToView();
   }
 
+  console.log(`columns`, columns)
   return (
     <>
       <div>
@@ -108,13 +114,20 @@ function DataTable(props) {
         />{" "}
         <Button onClick={handleOpenAddForm}>Add</Button>
       </div>
-      <Form
-        open={openAddForm}
-        handleOpen={handleOpenAddForm}
+
+
+      <FormDialog 
+      open={openAddForm} 
+      title="Add"
+      handleOpen={handleOpenAddForm}
+      >
+        <Form
         columns={columns}
         saveAction={addAction}
-      />
+        cancelAction={handleOpenAddForm}
 
+        />
+      </FormDialog>
       <TableContainer ref={tableRef} component={Paper}>
         <Table className={classes.table} aria-label="simple table">
           <TableHeader

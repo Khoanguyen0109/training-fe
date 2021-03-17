@@ -24,13 +24,11 @@ function FormDialog(props) {
     saveAction,
     cancelAction,
     values,
+    children
   } = props;
   const classes = useStyles();
 
-  function handleCancelAction() {
-    handleOpen();
-    cancelAction();
-  }
+
   return (
     <Dialog
       open={open}
@@ -41,12 +39,7 @@ function FormDialog(props) {
         {title}
       </DialogTitle>
       <DialogContent className={classes.content}>
-        <Form
-          columns={columns}
-          values={values}
-          saveAction={saveAction}
-          cancelAction={handleCancelAction}
-        />
+        {children}
       </DialogContent>
       {/* <DialogActions></DialogActions> */}
     </Dialog>

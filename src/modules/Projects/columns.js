@@ -7,7 +7,8 @@ export default [
     header: "ID ",
     align: "left",
     disablePadding: false,
-    sort: true,
+    tableRender:false,
+    formRender:false
   },
 
   {
@@ -15,8 +16,20 @@ export default [
     header: "Name",
     align: "left",
     disablePadding: false,
-    sort: true,
+    tableRender:true,
+    formRender:true,
+
     validate: yup.string("Enter your name").required("name is required"),
+  },
+  {
+    id: "users",
+    header: "Users",
+    align: "left",
+    type: "select",
+    select: true,
+    disablePadding: false,
+    tableRender:false,
+    formRender:true,    // options: ["Active", "Inactive"],
   },
   {
     id: "status",
@@ -25,8 +38,8 @@ export default [
     type: "select",
     select: true,
     disablePadding: false,
-    sort: true,
-    options: ["Active", "Inactive"],
+    tableRender:true,
+    formRender:true,    options: ["Active", "Inactive"],
   },
   // {
   //   id: "startDate",

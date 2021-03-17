@@ -40,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Form(props) {
   const { columns, saveAction, cancelAction, values } = props;
-
   const classes = useStyles();
   const formik = useFormik({
     initialValues: values || createDefaultValue(columns),
@@ -55,8 +54,9 @@ function Form(props) {
   });
   return (
     <form className={classes.content} onSubmit={formik.handleSubmit}>
-      {columns.map((col) => (
-        <TextField
+      { columns.map((col) =>  (
+       <TextField
+      {...col}
           id={col.id}
           label={col.header}
           name={col.id}
@@ -66,7 +66,7 @@ function Form(props) {
           helperText={formik.touched[col.id] && formik.errors[col.id]}
         >
           {col.type === "select" &&
-            col?.options.map((option) => (
+            col?.options?.map((option) => (
               <MenuItem key={option} value={option}>
                 {option}
               </MenuItem>

@@ -16,6 +16,7 @@ function TableHeader({ headers, order, ...props }) {
 
   const currentUser = useSelector(({ auth }) => auth.user);
 
+  console.log(`headers`, headers)
   return (
     <TableHead>
       <TableRow className="bg-grey-A800">
@@ -31,7 +32,7 @@ function TableHeader({ headers, order, ...props }) {
               sortDirection={order.id === col.id ? order.direction : false}
               className="text-white font-bold"
             >
-              {col.sort && (
+              {col.tableRender && (
                 <Tooltip
                   title="Sort"
                   placement={
