@@ -16,8 +16,8 @@ import * as yup from "yup";
 function createValidateSchema(columns) {
   const validateSchema = {};
   columns.forEach((col) => {
-    if (col.validate) {
-      validateSchema[col.id] = col.validate;
+    if (col.formRender?.validate) {
+      validateSchema[col.id] = col.formRender.validate;
     }
   });
   return validateSchema;
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Form(props) {
-  const { columns, saveAction, cancelAction, values } = props;
+  const { columns, saveAction, cancelAction, values , ...rest } = props;
   const classes = useStyles();
   const formik = useFormik({
     initialValues: values || createDefaultValue(columns),
@@ -54,7 +54,7 @@ function Form(props) {
   });
   return (
     <form className={classes.content} onSubmit={formik.handleSubmit}>
-      { columns.map((col) =>  (
+      {/* { columns.map((col) =>   (
        <TextField
       {...col}
           id={col.id}
@@ -72,7 +72,14 @@ function Form(props) {
               </MenuItem>
             ))}
         </TextField>
-      ))}
+      ))} */}
+
+      {columns.map(col =>{
+        if(col.formRender && typeof col.formRender.render ==='function'){
+          return col.formRender.render(formik.values[col.id] , col , formik , rest)
+
+        }
+      })}
       <Button autoFocus onClick={cancelAction} color="primary">
         Cancel
       </Button>

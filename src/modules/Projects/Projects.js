@@ -9,6 +9,8 @@ import columns from "./columns";
 function Projects() {
   const headers = columns.map((col) => col.header);
   const projects = useSelector(state => state.projects.projectsList)
+  const users = useSelector(state=> state.users.usersList)
+
   const history = useHistory();
 
   useEffect(()=>{},[])
@@ -39,6 +41,7 @@ function Projects() {
         filterSearch={filterSearch}
         deleteAction={deleteProject}
         addAction={addProject}
+        users={users}
       />
     </Layout>
   );

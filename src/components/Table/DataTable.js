@@ -41,6 +41,7 @@ function DataTable(props) {
     deleteAction,
     addAction,
     columns,
+    ...rest
   } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -70,8 +71,6 @@ function DataTable(props) {
   }, [rows, searchText]);
 
 
-  /// FormAction
-
 
   /// Table Function
   function scrollToView() {
@@ -100,7 +99,6 @@ function DataTable(props) {
     scrollToView();
   }
 
-  console.log(`columns`, columns)
   return (
     <>
       <div>
@@ -125,6 +123,7 @@ function DataTable(props) {
         columns={columns}
         saveAction={addAction}
         cancelAction={handleOpenAddForm}
+       {...rest}
 
         />
       </FormDialog>

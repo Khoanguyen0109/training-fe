@@ -18,10 +18,13 @@ function ProjectInfo() {
   const params = useParams()
   const {projectId} = params
   const projectInfo = useSelector(state => state.projects.projectInfo)
+
+  const users = useSelector(state=> state.users.usersList)
+  
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  
+
   useEffect(()=>{
     ///Fetch Info
 
@@ -46,7 +49,7 @@ function ProjectInfo() {
             <Tab label="Item Three" value={3} />
           </TabList>
           {/* </AppBar> */}
-          <TabPanel value={1}><Form columns={columns} value={projectInfo} saveAction={saveProject} /> </TabPanel>
+          <TabPanel value={1}><Form columns={columns} value={projectInfo} saveAction={saveProject} users={users} /> </TabPanel>
           <TabPanel value={2}><Tasks /></TabPanel>
         </TabContext>
       </Paper>
