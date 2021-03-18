@@ -2,7 +2,9 @@ const initialState = {
     usersList:[
         {
             id:1,
-            name:'Khoa Nguyen'
+            name:'Khoa Nguyen',
+            email:'admin@admin.com',
+            role:'ADMIN'
         }
     ],
     user:{}

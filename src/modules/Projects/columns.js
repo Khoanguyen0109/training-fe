@@ -8,8 +8,8 @@ export default [
     header: "ID ",
     align: "left",
     disablePadding: false,
-    tableRender:false,
-    formRender:{}
+    tableRender: false,
+    formRender: {},
   },
 
   {
@@ -17,11 +17,12 @@ export default [
     header: "Name",
     align: "left",
     disablePadding: false,
-    tableRender:true,
-    formRender:{
-      render :(text, record ,form  )=>{
-       return ( <TextField
-        {...record}
+    tableRender: true,
+    formRender: {
+      render: (text, record, form) => {
+        return (
+          <TextField
+            {...record}
             id={record.id}
             label={record.header}
             name={record.id}
@@ -29,12 +30,10 @@ export default [
             onChange={form.handleChange}
             error={form.touched[record.id] && Boolean(form.errors[record.id])}
             helperText={form.touched[record.id] && form.errors[record.id]}
-          >
-        
-          </TextField>)
+          ></TextField>
+        );
       },
       validate: yup.string("Enter your name").required("name is required"),
-
     },
   },
   {
@@ -43,16 +42,15 @@ export default [
     align: "left",
     type: "select",
     disablePadding: false,
-    defaultValue:[],    
-    tableRender:false,
-    formRender:{
-      render :(text, record ,form ,rest  )=>{
-        console.log('rest :>> ', rest);
-       return ( <Select
-        {...record}
-        select
-        multiple
-
+    defaultValue: [],
+    tableRender: false,
+    formRender: {
+      render: (text, record, form, rest) => {
+        return (
+          <Select
+            {...record}
+            select
+            multiple
             id={record.id}
             label={record.header}
             name={record.id}
@@ -66,16 +64,17 @@ export default [
                 vertical: "bottom",
                 horizontal: "left",
               },
-          
             }}
-          > 
-          {rest?.users?.map(user =><MenuItem key={user.id} value={user.id}>
-              {user.name}
-            </MenuItem>)}
-          </Select>)
+          >
+            {rest?.users?.map((user) => (
+              <MenuItem key={user.id} value={user.id}>
+                {user.name}
+              </MenuItem>
+            ))}
+          </Select>
+        );
       },
-      validate: yup.string("Enter your name").required("name is required"),
-
+      // validate: yup.string("Enter your name").required("name is required"),
     },
   },
   {
@@ -85,22 +84,24 @@ export default [
     type: "select",
     select: true,
     disablePadding: false,
-    tableRender:true,
-    defaultValue:0,
+    tableRender: {},
+    defaultValue: 0,
     options: [
       {
-        id:1,
-        status:'Active'
-      }
-    ,{
-      id:0,
-      status:'Inactive'
-    }],
-    formRender:{
-      render :(text, record ,form   )=>{
-       return ( <Select
-        {...record}
-          defaultValue={0}
+        id: 1,
+        status: "Active",
+      },
+      {
+        id: 0,
+        status: "Inactive",
+      },
+    ],
+    formRender: {
+      render: (text, record, form) => {
+        return (
+          <Select
+            {...record}
+            defaultValue={0}
             id={record.id}
             label={record.header}
             name={record.id}
@@ -114,16 +115,16 @@ export default [
                 vertical: "bottom",
                 horizontal: "left",
               },
-          
             }}
-          > 
-          {record?.options?.map(option =><MenuItem key={option.id} value={option.id}>
-              {option.status}
-            </MenuItem>)}
-          </Select>)
+          >
+            {record?.options?.map((option) => (
+              <MenuItem key={option.id} value={option.id}>
+                {option.status}
+              </MenuItem>
+            ))}
+          </Select>
+        );
       },
-      validate: yup.string("Enter your name").required("name is required"),
-
     },
   },
   // {
@@ -138,4 +139,16 @@ export default [
   //     max: 100,
   //   },
   // },
+  {
+    id: "action",
+    header: "Action",
+    align: "left",
+    disablePadding: false,
+    auth:['ADMIN'],
+    tableRender:{
+      render:()=>{
+
+      }
+    }
+  },
 ];

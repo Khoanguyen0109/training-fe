@@ -18,7 +18,7 @@ function ProjectInfo() {
   const params = useParams()
   const {projectId} = params
   const projectInfo = useSelector(state => state.projects.projectInfo)
-
+  
   const users = useSelector(state=> state.users.usersList)
   
   const handleChange = (event, newValue) => {
@@ -30,6 +30,7 @@ function ProjectInfo() {
 
     return()=>{
       //remove task
+      //remove project Info
     }
   },[projectId])
 
@@ -46,7 +47,6 @@ function ProjectInfo() {
           <TabList onChange={handleChange} aria-label="simple tabs example">
             <Tab label="Info" value={1} />
             <Tab label="Tasks" value={2} />
-            <Tab label="Item Three" value={3} />
           </TabList>
           {/* </AppBar> */}
           <TabPanel value={1}><Form columns={columns} value={projectInfo} saveAction={saveProject} users={users} /> </TabPanel>

@@ -49,30 +49,12 @@ function Form(props) {
       resetForm(values || createDefaultValue(columns));
 
       saveAction(values);
+      cancelAction()
     },
     validationSchema: yup.object(createValidateSchema(columns)),
   });
   return (
     <form className={classes.content} onSubmit={formik.handleSubmit}>
-      {/* { columns.map((col) =>   (
-       <TextField
-      {...col}
-          id={col.id}
-          label={col.header}
-          name={col.id}
-          value={formik.values[col.id]}
-          onChange={formik.handleChange}
-          error={formik.touched[col.id] && Boolean(formik.errors[col.id])}
-          helperText={formik.touched[col.id] && formik.errors[col.id]}
-        >
-          {col.type === "select" &&
-            col?.options?.map((option) => (
-              <MenuItem key={option} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-        </TextField>
-      ))} */}
 
       {columns.map(col =>{
         if(col.formRender && typeof col.formRender.render ==='function'){
@@ -80,12 +62,15 @@ function Form(props) {
 
         }
       })}
+      <div>
       <Button autoFocus onClick={cancelAction} color="primary">
         Cancel
       </Button>
       <Button type="submit" color="primary">
-        Subscribe
+        SAve
       </Button>
+      </div>
+
     </form>
   );
 }

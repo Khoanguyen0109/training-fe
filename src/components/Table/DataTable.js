@@ -36,10 +36,12 @@ function DataTable(props) {
   const {
     headers,
     rows,
-    filterSearch,
+    filterArray,
+    filterFunc,
     onRowClick,
     deleteAction,
     addAction,
+    editAction,
     columns,
     ...rest
   } = props;
@@ -63,8 +65,9 @@ function DataTable(props) {
   }
 
   useEffect(() => {
+    console.log(`render table`)
     if (searchText.length !== 0) {
-      setFilter(_.filter(rows, (item) => filterSearch(item)));
+      setFilter(_.filter(rows, (item) => filterFunc(item , searchText)));
     } else {
       setFilter(rows);
     }
@@ -136,17 +139,19 @@ function DataTable(props) {
             rowCount={filter.length}
           />
           <TableBody>
-            {_.orderBy(filter, [headers], [order.direction])
+            {_.orderBy(filter, [filterArray], [order.direction])
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
-                const rowData = createColumns(columns, row);
                 return (
                   <Row
+                  columns={columns}
                     key={row.id}
                     rowId={row.id}
-                    row={rowData}
+                    row={row}
                     onRowClick={onRowClick}
-                    deleteAction={deleteAction}
+                    deleteAction={deleteAction || null}
+                    editAction={editAction || null}
+
                   />
                 );
               })}

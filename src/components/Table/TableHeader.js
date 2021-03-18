@@ -21,11 +21,11 @@ function TableHeader({ headers, order, ...props }) {
     <TableHead>
       <TableRow className="bg-grey-A800">
         {headers.map((col) => {
-          if (col.auth && !hasPermission(col.auth, currentUser.role)) {
+          if (col.auth &&   !hasPermission(col.auth, currentUser.role)) {
             return null;
           }
           return (
-            <TableCell
+           col.tableRender&& <TableCell
               key={col.id}
               align={col.align}
               padding={col.disablePadding ? "none" : "default"}

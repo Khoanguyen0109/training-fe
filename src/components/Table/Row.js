@@ -6,12 +6,14 @@ import {
   TableCell,
   TableRow,
 } from "@material-ui/core";
+import { DeleteOutline, Edit } from "@material-ui/icons";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Action } from "rxjs/internal/scheduler/Action";
+import { useDispatch, useSelector } from "react-redux";
 import hasPermission from "../../auth/hasPermission";
 import ConfirmDialog from "../CofirmDialog/ConfirmDialog";
-import Cell from "./Cell";
+import FormDialog from "../Dialog/FormDialog";
+import Form from "../Form/Form";
+import { createColumns } from "./createColumns";
 
 const useStyles = makeStyles({
   row: {
@@ -23,48 +25,79 @@ const useStyles = makeStyles({
 });
 
 function Row(props) {
-  const { rowId, row, onRowClick, deleteAction } = props;
+  const { columns, rowId, row, onRowClick, deleteAction, editAction } = props;
   const classes = useStyles();
+  const dispatch = useDispatch();
   const currentUser = useSelector(({ auth }) => auth.user);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   function handleOpenDeleteConfirm(e) {
     setOpenDelete(!openDelete);
   }
+  function handleOpenEditConfirm(e) {
+    setOpenEdit(!openEdit);
+  }
 
   async function handleDelete() {
-    await deleteAction();
+    await deleteAction(row.id);
     setOpenDelete(false);
   }
 
+  console.log(`row`, row);
   return (
     <>
       <TableRow onClick={(e) => onRowClick(rowId)} className={classes.row}>
-        {row.map(
-          (cell, index) =>
-            cell.tableRender && <Cell key={index} rowId={rowId} cell={cell} />
+        {createColumns(columns, row).map(
+          (cell) =>
+            cell.tableRender && (
+              <TableCell>
+                {cell.tableRender.render
+                  ? cell.tableRender.render(cell.data, row, editAction)
+                  : cell.data}
+              </TableCell>
+            )
         )}
-        {hasPermission(row.auth, currentUser.role) && (
-          <TableCell
-            component="th"
-            scope="row"
-            align="center"
-            className={classes.deleteCell}
-          >
+        <TableCell
+          component="th"
+          scope="row"
+          align="center"
+          className={classes.deleteCell}
+        >
+          {editAction && (
+            <IconButton
+              onClick={(ev) => {
+                ev.stopPropagation();
+                handleOpenEditConfirm(ev);
+              }}
+            >
+              <Edit />
+            </IconButton>
+          )}
+          {deleteAction && (
             <IconButton
               onClick={(ev) => {
                 ev.stopPropagation();
                 handleOpenDeleteConfirm(ev);
               }}
             >
-              <Icon>delete</Icon>
+              <DeleteOutline />
             </IconButton>
-          </TableCell>
-        )}
-        <TableCell className={classes.deleteCell}>
-          <Button>Delete</Button>
+          )}
         </TableCell>
       </TableRow>
+      <FormDialog
+        open={openEdit}
+        title="Edit"
+        handleOpen={handleOpenEditConfirm}
+      >
+        <Form
+          values={row}
+          columns={columns}
+          saveAction={editAction}
+          cancelAction={handleOpenEditConfirm}
+        />
+      </FormDialog>
       <ConfirmDialog
         id={row.id}
         title="Are you sure to Delete this?"

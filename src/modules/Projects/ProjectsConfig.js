@@ -19,7 +19,7 @@ const ProjectsConfig = {
       exact: true,
     },
     {
-      path: `${defaultRoute}/1`,
+      path: `${defaultRoute}/:projectId`,
       // component: React.lazy(() => import("./ProjectInfo")),
       component: ProjectInfo,
     },

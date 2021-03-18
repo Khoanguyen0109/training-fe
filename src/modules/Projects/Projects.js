@@ -1,33 +1,56 @@
 import { Box, Button } from "@material-ui/core";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import DataTable from "../../components/Table/DataTable";
 import Layout from "../../layout/Layout";
 import columns from "./columns";
+import { ADD_PROJECT, REMOVE_PROJECT } from "./store/projects.actions";
 
 function Projects() {
   const headers = columns.map((col) => col.header);
   const projects = useSelector(state => state.projects.projectsList)
   const users = useSelector(state=> state.users.usersList)
-
+  const filterArray=['name']
   const history = useHistory();
+  
+  const dispatch= useDispatch()
+  useEffect(()=>{
 
-  useEffect(()=>{},[])
+    //fetch Project
+  },[])
+
+  function filterFunc(item, searchText) {
+    return item?.name
+      ?.toString()
+      .toLowerCase()
+      .trim()
+      .includes(searchText.toLowerCase().trim());
+  }
 
   function onRowClick(id) {
     history.push(`/projects/${id}`);
   }
 
-  function filterSearch(item) {
-    return true;
+
+
+  function addProject(data){
+    dispatch({
+      type:ADD_PROJECT,
+      payload: data
+    })
+
+
   }
 
-  function addProject(){
+  function deleteProject(id) {
+    console.log(`id`, id)
+    dispatch({
+      type:REMOVE_PROJECT,
+      payload: id
+    })
 
   }
-
-  function deleteProject(id) {}
 
   console.log(`headers`, headers)
   return (
@@ -37,8 +60,9 @@ function Projects() {
         headers={headers}
         rows={projects}
         columns={columns}
+        filterFunc={filterFunc}
         onRowClick={onRowClick}
-        filterSearch={filterSearch}
+        filterArray={filterArray}
         deleteAction={deleteProject}
         addAction={addProject}
         users={users}
