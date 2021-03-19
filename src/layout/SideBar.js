@@ -49,7 +49,7 @@ function SideBar(props) {
   const classes = useStyles();
   const history = useHistory();
 
-  const currentUser = useSelector((state) => state.auth);
+  const currentUser = useSelector((state) => state.auth.user);
   const menus = () => {
     const menus = routes.filter(
       (route) => !!route.menu && hasPermission(route.auth, currentUser.role)

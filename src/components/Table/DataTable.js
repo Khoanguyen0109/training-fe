@@ -65,7 +65,6 @@ function DataTable(props) {
   }
 
   useEffect(() => {
-    console.log(`render table`)
     if (searchText.length !== 0) {
       setFilter(_.filter(rows, (item) => filterFunc(item , searchText)));
     } else {

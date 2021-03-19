@@ -16,7 +16,6 @@ function TableHeader({ headers, order, ...props }) {
 
   const currentUser = useSelector(({ auth }) => auth.user);
 
-  console.log(`headers`, headers)
   return (
     <TableHead>
       <TableRow className="bg-grey-A800">

@@ -25,7 +25,10 @@ function createValidateSchema(columns) {
 function createDefaultValue(columns) {
   const defaultValue = {};
   columns.forEach((col) => {
-    defaultValue[col.id] = col.defaultValue || "";
+    if (col.formRender?.validate) {
+      defaultValue[col.id] = col.defaultValue || "";
+
+    }
   });
   return defaultValue;
 }
@@ -44,7 +47,6 @@ function Form(props) {
   const formik = useFormik({
     initialValues: values || createDefaultValue(columns),
     onSubmit: (values, { setSubmitting, resetForm }) => {
-      console.log(`values`, values);
       //   handleOpen();
       resetForm(values || createDefaultValue(columns));
 

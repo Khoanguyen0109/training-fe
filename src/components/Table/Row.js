@@ -44,7 +44,6 @@ function Row(props) {
     setOpenDelete(false);
   }
 
-  console.log(`row`, row);
   return (
     <>
       <TableRow onClick={(e) => onRowClick(rowId)} className={classes.row}>

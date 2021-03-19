@@ -5,13 +5,17 @@ import {
   Toolbar,
   Typography,
   Badge,
+  Button,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-
+import jwtService from '../services/jwtService'
 import React from "react";
 import clsx from "clsx";
 import { DRAWER_WIDTH } from "./config";
+import { useDispatch } from "react-redux";
+import { REMOVE_USER_DATA } from "../auth/store/auth.action";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
@@ -52,6 +56,19 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar(props) {
   const classes = useStyles();
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  
+  function handleLogout(){
+    dispatch({
+      type:REMOVE_USER_DATA
+    })
+    jwtService.logout()
+    history.push({
+			pathname: '/'
+		});
+  } 
   return (
     <AppBar
       position="absolute"
@@ -84,6 +101,10 @@ function Navbar(props) {
             <NotificationsIcon />
           </Badge>
         </IconButton>
+
+        <Button onClick={handleLogout}>
+          Logout
+        </Button>
       </Toolbar>
     </AppBar>
   );

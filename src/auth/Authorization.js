@@ -10,21 +10,19 @@ function Authorization({ children }) {
   const history = useHistory();
   const location = useLocation();
   const { pathname } = location;
-
+  const user = useSelector(state => state.auth.user)
   const appContext = useContext(AppContext);
   const { routes } = appContext;
-  const role = useSelector((state) => state.auth.role);
-  const [accessGranted, setAccessGranted] = useState(true);
+  const [accessGranted, setAccessGranted] =   useState(true);
 
   useEffect(() => {
     const matched = matchRoutes(routes, pathname)[0];
-    console.log("matched", matched);
     if (matched) {
-      setAccessGranted(hasPermission(matched.route.auth, role));
+      setAccessGranted(hasPermission(matched.route.auth, user.role));
     } else {
       setAccessGranted(true);
     }
-  }, [pathname]);
+  }, [pathname , user]);
 
   useEffect(() => {
     if (!accessGranted) {
@@ -36,7 +34,7 @@ function Authorization({ children }) {
     const { pathname, state } = location;
     const redirectUrl = state && state.redirectUrl ? state.redirectUrl : "/";
 
-    if (!role) {
+    if (!user.role) {
       history.push({
         pathname: "/login",
         state: { redirectUrl: pathname },

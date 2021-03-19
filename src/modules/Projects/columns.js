@@ -77,56 +77,56 @@ export default [
       // validate: yup.string("Enter your name").required("name is required"),
     },
   },
-  {
-    id: "status",
-    header: "Status",
-    align: "left",
-    type: "select",
-    select: true,
-    disablePadding: false,
-    tableRender: {},
-    defaultValue: 0,
-    options: [
-      {
-        id: 1,
-        status: "Active",
-      },
-      {
-        id: 0,
-        status: "Inactive",
-      },
-    ],
-    formRender: {
-      render: (text, record, form) => {
-        return (
-          <Select
-            {...record}
-            defaultValue={0}
-            id={record.id}
-            label={record.header}
-            name={record.id}
-            value={text}
-            onChange={form.handleChange}
-            error={form.touched[record.id] && Boolean(form.errors[record.id])}
-            helperText={form.touched[record.id] && form.errors[record.id]}
-            MenuProps={{
-              getContentAnchorEl: null,
-              anchorOrigin: {
-                vertical: "bottom",
-                horizontal: "left",
-              },
-            }}
-          >
-            {record?.options?.map((option) => (
-              <MenuItem key={option.id} value={option.id}>
-                {option.status}
-              </MenuItem>
-            ))}
-          </Select>
-        );
-      },
-    },
-  },
+  // {
+  //   id: "status",
+  //   header: "Status",
+  //   align: "left",
+  //   type: "select",
+  //   select: true,
+  //   disablePadding: false,
+  //   tableRender: {},
+  //   defaultValue: 0,
+  //   options: [
+  //     {
+  //       id: 1,
+  //       status: "Active",
+  //     },
+  //     {
+  //       id: 0,
+  //       status: "Inactive",
+  //     },
+  //   ],
+  //   formRender: {
+  //     render: (text, record, form) => {
+  //       return (
+  //         <Select
+  //           {...record}
+  //           defaultValue={0}
+  //           id={record.id}
+  //           label={record.header}
+  //           name={record.id}
+  //           value={text}
+  //           onChange={form.handleChange}
+  //           error={form.touched[record.id] && Boolean(form.errors[record.id])}
+  //           helperText={form.touched[record.id] && form.errors[record.id]}
+  //           MenuProps={{
+  //             getContentAnchorEl: null,
+  //             anchorOrigin: {
+  //               vertical: "bottom",
+  //               horizontal: "left",
+  //             },
+  //           }}
+  //         >
+  //           {record?.options?.map((option) => (
+  //             <MenuItem key={option.id} value={option.id}>
+  //               {option.status}
+  //             </MenuItem>
+  //           ))}
+  //         </Select>
+  //       );
+  //     },
+  //   },
+  // },
   // {
   //   id: "startDate",
   //   header: "Start Date",

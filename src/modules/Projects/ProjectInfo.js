@@ -38,7 +38,6 @@ function ProjectInfo() {
   function saveProject(){
   }
 
-  console.log(`columns`, columns)
   return (
     <Layout>
       <Paper square className={classes.root}>

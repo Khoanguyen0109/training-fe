@@ -15,17 +15,19 @@ const initialState = {
 const projectReducer = (state = initialState, action) => {
   switch (action.type) {
     case ProjectActions.SET_PROJECTS_LIST:
-      break;
-
-    case ProjectActions.ADD_PROJECT:
+        return {
+          ...state,
+          projectsList: action.payload
+        }
+    case ProjectActions.UPDATE_PROJECTS_LIST:
       return { 
         ...state, 
         projectsList: [action.payload, ...state.projectsList] 
        }
 
-    case ProjectActions.REMOVE_PROJECT:{
-      return {  // returning a copy of orignal state
-        ...state, //copying the original state
+    case ProjectActions.REDUCE_PROJECT_LIST:{
+      return {  
+        ...state, 
         projectsList: state.projectsList.filter(project => project.id !== action.payload) 
       }
     }

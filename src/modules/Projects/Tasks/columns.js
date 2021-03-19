@@ -47,9 +47,7 @@ export default [
     select: true,
     disablePadding: false,
     sort: true,
-    onChange:()=>{
-      console.log(`switch` )
-    },
+
     tableRender: {
       render:(text , record , action) =>{
       return  <Switch

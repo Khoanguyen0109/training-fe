@@ -12,7 +12,6 @@ import { renderRoutes } from "react-router-config";
 
 function App() {
   const user = useSelector((state) => state.auth);
-  console.log("routes", routes);
   return (
     <AppContext.Provider
       value={{
@@ -25,7 +24,6 @@ function App() {
             <Authorization>
               <AppContext.Consumer>
                 {({ routes }) => {
-                  console.log("routes", routes);
                   return <>{renderRoutes(routes)}</>;
                 }}
               </AppContext.Consumer>{" "}

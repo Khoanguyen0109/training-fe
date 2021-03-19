@@ -9,6 +9,9 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { LOGIN } from "../../auth/store/auth.action";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,23 +53,30 @@ const validationSchema = yup.object({
     .required("Email is required"),
   password: yup
     .string("Enter your password")
-    .min(8, "Password should be of minimum 8 characters length")
+    .min(6, "Password should be of minimum 6 characters length")
     .required("Password is required"),
 });
 
 function Login() {
   const classes = useStyles();
+  const dispatch= useDispatch()
+  const user = useSelector(state => state.auth.user)
+  const error = useSelector(state =>state.auth.error)
+  const history = useHistory()
   const formik = useFormik({
     initialValues: {
-      email: "foobar@example.com",
-      password: "foobar",
+      email: "alice@prisma.io",
+      password: "123456",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+        await dispatch({
+          type: LOGIN ,
+          payload: values
+        })
     },
   });
-  console.log("formik.value", formik.values);
+  console.log(`error`, error)
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -114,6 +124,8 @@ function Login() {
             <Button color="primary" variant="contained" fullWidth type="submit">
               Sign in
             </Button>
+
+            {error && <div>{error}</div>}
           </form>
         </div>
       </Grid>

@@ -3,6 +3,8 @@ import jwtDecode from "jwt-decode";
 import EventEmitter from "./EventEmiter";
 /* eslint-disable camelcase */
 
+const API = "http://localhost:5000";
+
 class JwtService extends EventEmitter {
   init() {
     this.setInterceptors();
@@ -51,26 +53,8 @@ class JwtService extends EventEmitter {
 
   createUser = (data) => {
     return new Promise((resolve, reject) => {
-      axios.post("/api/auth/register", data).then((response) => {
-        if (response.data.user) {
-          this.setSession(response.data.access_token);
-          resolve(response.data.user);
-        } else {
-          reject(response.data.error);
-        }
-      });
-    });
-  };
-
-  signInWithEmailAndPassword = (email, password) => {
-    return new Promise((resolve, reject) => {
       axios
-        .get("/api/auth", {
-          data: {
-            email,
-            password,
-          },
-        })
+        .post(`${process.env.API_URL}/auth/register`, data)
         .then((response) => {
           if (response.data.user) {
             this.setSession(response.data.access_token);
@@ -82,24 +66,46 @@ class JwtService extends EventEmitter {
     });
   };
 
-  signInWithToken = () => {
+  signInWithEmailAndPassword = (email, password) => {
     return new Promise((resolve, reject) => {
       axios
-        .get("/api/auth/access-token", {
-          data: {
-            access_token: this.getAccessToken(),
-          },
+        .post(`http://localhost:5000/auth/login`, {
+          email,
+          password,
         })
         .then((response) => {
           if (response.data.user) {
             this.setSession(response.data.access_token);
-            resolve(response.data.user);
+            resolve(response.data);
+          }
+
+        }).catch(error=>{
+
+          reject(error.response.data);
+
+        });
+    });
+  };
+
+  signInWithToken = () => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`http://localhost:5000/auth/token`, {
+           
+            access_token: this.getAccessToken(),
+          
+        })
+        .then((response) => {
+          if (response.data.user) {
+            this.setSession(response.data.access_token);
+            resolve(response.data);
           } else {
             this.logout();
             Promise.reject(new Error("Failed to login with token."));
           }
         })
         .catch((error) => {
+          console.log(`error`, error)
           this.logout();
           Promise.reject(new Error("Failed to login with token."));
         });
@@ -114,10 +120,10 @@ class JwtService extends EventEmitter {
 
   setSession = (access_token) => {
     if (access_token) {
-      localStorage.setItem("jwt_access_token", access_token);
+      localStorage.setItem("access_token", access_token);
       axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
     } else {
-      localStorage.removeItem("jwt_access_token");
+      localStorage.removeItem("access_token");
       delete axios.defaults.headers.common.Authorization;
     }
   };
@@ -141,8 +147,10 @@ class JwtService extends EventEmitter {
   };
 
   getAccessToken = () => {
-    return window.localStorage.getItem("jwt_access_token");
+    return window.localStorage.getItem("access_token");
   };
+
+  
 }
 
 const instance = new JwtService();
