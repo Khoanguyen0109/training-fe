@@ -90,6 +90,7 @@ function SideBar(props) {
           <Item
             title={item.menu.title}
             path={item.menu.path}
+            icon={item.menu.icon}
             onClick={handleClick}
           ></Item>
         ))}

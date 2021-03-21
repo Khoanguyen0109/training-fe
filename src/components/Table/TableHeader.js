@@ -18,37 +18,40 @@ function TableHeader({ headers, order, ...props }) {
 
   return (
     <TableHead>
-      <TableRow className="bg-grey-A800">
+      <TableRow>
         {headers.map((col) => {
-          if (col.auth &&   !hasPermission(col.auth, currentUser.role)) {
+          if (col.auth && !hasPermission(col.auth, currentUser.role)) {
             return null;
           }
           return (
-           col.tableRender&& <TableCell
-              key={col.id}
-              align={col.align}
-              padding={col.disablePadding ? "none" : "default"}
-              sortDirection={order.id === col.id ? order.direction : false}
-              className="text-white font-bold"
-            >
-              {col.tableRender && (
-                <Tooltip
-                  title="Sort"
-                  placement={
-                    col.align === "right" ? "bottom-end" : "bottom-start"
-                  }
-                  enterDelay={300}
-                >
-                  <TableSortLabel
-                    active={order.id === col.id}
-                    direction={order.direction}
-                    onClick={createSortHandler(col.id)}
+            col.tableRender && (
+              <TableCell
+                key={col.id}
+                align={col.align}
+                padding={col.disablePadding ? "none" : "default"}
+                sortDirection={order.id === col.id ? order.direction : false}
+                className="text-white font-bold"
+              >
+                {col.tableRender && (
+                  <Tooltip
+                    title="Sort"
+                    placement={
+                      col.align === "right" ? "bottom-end" : "bottom-start"
+                    }
+                    enterDelay={300}
+                    style={{ fontSize: "15px", fontWeight: "bold" }}
                   >
-                    {col.header}
-                  </TableSortLabel>
-                </Tooltip>
-              )}
-            </TableCell>
+                    <TableSortLabel
+                      active={order.id === col.id}
+                      direction={order.direction}
+                      onClick={createSortHandler(col.id)}
+                    >
+                      {col.header}
+                    </TableSortLabel>
+                  </Tooltip>
+                )}
+              </TableCell>
+            )
           );
         }, this)}
       </TableRow>

@@ -1,17 +1,14 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import DataTable from "../../components/Table/DataTable";
 import Layout from "../../layout/Layout";
 import columns from "./columns";
+import { ADD_USER, GET_USERS_LIST, REMOVE_USER } from "./store/user.actions";
 
 function Users() {
-  const users = useSelector((state) => state.users.usersList);
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users.users);
   const filterArray = ["name"];
-
-  function onRowClick() {}
-  function addUser() {
-    return;
-  }
 
   function filterFunc(item, searchText) {
     return item?.name
@@ -21,12 +18,25 @@ function Users() {
       .includes(searchText.toLowerCase().trim());
   }
 
-  function deleteUser() {
-    return;
+  useEffect(() => {
+    dispatch({ type: GET_USERS_LIST });
+  }, []);
+
+  function onRowClick() {}
+  function addUser(data) {
+    dispatch({ type: ADD_USER, payload: data });
+  }
+
+  function deleteUser(id) {
+    console.log("id :>> ", id);
+    dispatch({ type: REMOVE_USER, payload: id });
   }
 
   function editUser(id) {}
 
+  if (!users) {
+    return <div>Loading</div>;
+  }
   return (
     <Layout>
       {" "}

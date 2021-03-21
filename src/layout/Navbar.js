@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import jwtService from '../services/jwtService'
+import jwtService from "../services/jwtService";
 import React from "react";
 import clsx from "clsx";
 import { DRAWER_WIDTH } from "./config";
@@ -56,19 +56,18 @@ const useStyles = makeStyles((theme) => ({
 
 function Navbar(props) {
   const classes = useStyles();
-  const dispatch = useDispatch()
-  const history = useHistory()
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  
-  function handleLogout(){
+  function handleLogout() {
     dispatch({
-      type:REMOVE_USER_DATA
-    })
-    jwtService.logout()
+      type: REMOVE_USER_DATA,
+    });
+    jwtService.logout();
     history.push({
-			pathname: '/'
-		});
-  } 
+      pathname: "/",
+    });
+  }
   return (
     <AppBar
       position="absolute"
@@ -94,15 +93,15 @@ function Navbar(props) {
           noWrap
           className={classes.title}
         >
-          Dashboard
+          Demo
         </Typography>
-        <IconButton color="inherit">
+        {/* <IconButton color="inherit">
           <Badge badgeContent={4} color="secondary">
             <NotificationsIcon />
           </Badge>
-        </IconButton>
+        </IconButton> */}
 
-        <Button onClick={handleLogout}>
+        <Button color="inherit" onClick={handleLogout}>
           Logout
         </Button>
       </Toolbar>

@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Splash from "../layout/Splash";
+import { enqueueFailedSnackbar } from "../redux/actions/global.actions";
 import jwtService from "../services/jwtService";
-import { loginFailed, loginSuccess, REMOVE_USER_DATA } from "./store/auth.action";
+import {
+  loginFailed,
+  loginSuccess,
+  REMOVE_USER_DATA,
+} from "./store/auth.action";
 
 function Auth({ children }) {
   const [waitToCheck, setWaitToCheck] = useState(true);
@@ -23,10 +28,12 @@ function Auth({ children }) {
           .signInWithToken()
           .then((data) => {
             dispatch(loginSuccess(data));
+          })
+          .then(() => {
             resolve();
           })
           .catch((error) => {
-            dispatch(loginFailed(error));
+            dispatch(enqueueFailedSnackbar(error));
             // this.props.showMessage({ message: error });
             resolve();
           });
@@ -48,7 +55,6 @@ function Auth({ children }) {
 
       return Promise.resolve();
     });
-    return;
   }
   return waitToCheck ? <Splash /> : <> {children}</>;
 }

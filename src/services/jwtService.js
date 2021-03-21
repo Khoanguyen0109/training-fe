@@ -78,11 +78,9 @@ class JwtService extends EventEmitter {
             this.setSession(response.data.access_token);
             resolve(response.data);
           }
-
-        }).catch(error=>{
-
+        })
+        .catch((error) => {
           reject(error.response.data);
-
         });
     });
   };
@@ -91,9 +89,7 @@ class JwtService extends EventEmitter {
     return new Promise((resolve, reject) => {
       axios
         .post(`http://localhost:5000/auth/token`, {
-           
-            access_token: this.getAccessToken(),
-          
+          access_token: this.getAccessToken(),
         })
         .then((response) => {
           if (response.data.user) {
@@ -105,7 +101,6 @@ class JwtService extends EventEmitter {
           }
         })
         .catch((error) => {
-          console.log(`error`, error)
           this.logout();
           Promise.reject(new Error("Failed to login with token."));
         });
@@ -149,8 +144,6 @@ class JwtService extends EventEmitter {
   getAccessToken = () => {
     return window.localStorage.getItem("access_token");
   };
-
-  
 }
 
 const instance = new JwtService();

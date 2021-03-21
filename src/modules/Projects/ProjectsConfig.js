@@ -11,9 +11,9 @@ const ProjectsConfig = {
       // component: React.lazy(() => import("./Projects")),
       component: Projects,
       menu: {
-        title: "Project",
+        title: "Projects",
         path: defaultRoute,
-        icon: "",
+        icon: "account_balance_wallet",
         order: 2,
       },
       exact: true,

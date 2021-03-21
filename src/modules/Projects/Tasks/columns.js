@@ -19,9 +19,7 @@ export default [
     align: "left",
     disablePadding: false,
     sort: true,
-    tableRender: {
-
-    },
+    tableRender: {},
     formRender: {
       render: (text, record, form) => {
         return (
@@ -49,22 +47,19 @@ export default [
     sort: true,
 
     tableRender: {
-      render:(text , record , action) =>{
-      return  <Switch
-        checked={text }
-        name="checkedA"
-        onChange={()=>{
-          action(record.id)
-
-        }
-        }
-        inputProps={{ 'aria-label': 'secondary checkbox' }}
-      />
-      }
-
+      render: (text, record, action) => {
+        return (
+          <Switch
+            checked={text}
+            name="checkedA"
+            onChange={(e) => {
+              action({ ...record, status: e.target.checked });
+            }}
+            inputProps={{ "aria-label": "secondary checkbox" }}
+          />
+        );
+      },
     },
-
-    options: ["Active", "Inactive"],
   },
   // {
   //   id: "startDate",

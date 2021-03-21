@@ -1,6 +1,8 @@
 import React from "react";
 import reactDom from "react-dom";
 import { Provider } from "react-redux";
+import { SnackbarProvider } from "notistack";
+
 import App from "./App";
 import configureStore from "./redux/store";
 import reportWebVitals from "./reportWebVitals";
@@ -8,7 +10,9 @@ import reportWebVitals from "./reportWebVitals";
 reactDom.render(
   <React.StrictMode>
     <Provider store={configureStore()}>
-      <App />
+      <SnackbarProvider>
+        <App />
+      </SnackbarProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

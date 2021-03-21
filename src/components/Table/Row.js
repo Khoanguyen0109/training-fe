@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   row: {
     // minWidth: 650,
   },
-  deleteCell: {
+  actionCell: {
     borderBlockStyle: "none",
   },
 });
@@ -50,7 +50,7 @@ function Row(props) {
         {createColumns(columns, row).map(
           (cell) =>
             cell.tableRender && (
-              <TableCell>
+              <TableCell key={cell.id} align={cell.align}>
                 {cell.tableRender.render
                   ? cell.tableRender.render(cell.data, row, editAction)
                   : cell.data}
@@ -61,7 +61,7 @@ function Row(props) {
           component="th"
           scope="row"
           align="center"
-          className={classes.deleteCell}
+          className={classes.actionCell}
         >
           {editAction && (
             <IconButton

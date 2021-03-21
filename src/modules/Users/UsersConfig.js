@@ -12,7 +12,7 @@ const UsersConfig = {
       menu: {
         title: "Users",
         path: defaultRoute,
-        icon: "",
+        icon: "person",
         order: 3,
       },
     },

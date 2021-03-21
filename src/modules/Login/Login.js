@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "@material-ui/core/Button";
@@ -12,6 +12,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { LOGIN } from "../../auth/store/auth.action";
 import { useHistory } from "react-router";
+import { IconButton, InputAdornment } from "@material-ui/core";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,10 +61,11 @@ const validationSchema = yup.object({
 
 function Login() {
   const classes = useStyles();
-  const dispatch= useDispatch()
-  const user = useSelector(state => state.auth.user)
-  const error = useSelector(state =>state.auth.error)
-  const history = useHistory()
+  const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
+  function handleShowPassword() {
+    setShowPassword(!showPassword);
+  }
   const formik = useFormik({
     initialValues: {
       email: "alice@prisma.io",
@@ -70,13 +73,12 @@ function Login() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-        await dispatch({
-          type: LOGIN ,
-          payload: values
-        })
+      await dispatch({
+        type: LOGIN,
+        payload: values,
+      });
     },
   });
-  console.log(`error`, error)
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
@@ -112,20 +114,30 @@ function Login() {
               variant="outlined"
               margin="normal"
               fullWidth
+              type={showPassword ? "text" : "password"}
               id="password"
               name="password"
               label="Password"
-              type="password"
               value={formik.values.password}
               onChange={formik.handleChange}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleShowPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button color="primary" variant="contained" fullWidth type="submit">
               Sign in
             </Button>
-
-            {error && <div>{error}</div>}
           </form>
         </div>
       </Grid>

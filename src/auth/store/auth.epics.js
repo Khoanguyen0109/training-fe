@@ -4,13 +4,8 @@ import jwtService from "../../services/jwtService";
 import { mergeMap, catchError, switchMap, map, tap } from "rxjs/operators";
 import { from, of } from "rxjs";
 
-import {
-  LOGIN,
-  loginFailed,
-  loginSuccess,
-  LOGOUT,
-  SET_USER_DATA,
-} from "./auth.action";
+import { LOGIN, loginSuccess } from "./auth.action";
+import { enqueueFailedSnackbar } from "../../redux/actions/global.actions";
 
 // const API = process.env.REACT_APP_BASE_URL;
 const API = "http://localhost:5000";
@@ -23,18 +18,14 @@ export const loginEpic = (action$) => {
       return from(jwtService.signInWithEmailAndPassword(email, password)).pipe(
         tap((data) => console.log("HTTP response:", data)),
         mergeMap((data) => {
-          console.log(`data`, data)
-
           if (data.error) {
-            console.log(`data`, data)
-            return of(loginFailed(data.error));
+            return of(enqueueFailedSnackbar(data.error));
           }
           return of(loginSuccess(data));
         }),
 
         catchError((data) => {
-          console.log(`data`, data)
-          return of(loginFailed(data.error));
+          return of(enqueueFailedSnackbar(data.error));
         })
       );
     })
@@ -57,6 +48,4 @@ export const loginEpic = (action$) => {
 //   );
 // };
 
-
-export default [loginEpic
-];
+export default [loginEpic];

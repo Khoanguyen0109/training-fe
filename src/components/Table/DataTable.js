@@ -8,10 +8,10 @@ import {
   Typography,
   TextField,
   TablePagination,
+  InputAdornment,
 } from "@material-ui/core";
 import _ from "lodash";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import Row from "./Row";
 import { createColumns } from "./createColumns";
 import TableHeader from "./TableHeader";
@@ -19,16 +19,23 @@ import { ref } from "yup";
 import TablePaginationActions from "@material-ui/core/TablePagination/TablePaginationActions";
 import Form from "../Form/Form";
 import FormDialog from "../Dialog/FormDialog";
+import { SearchOutlined } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   table: {
-    // minWidth: 650,
-    maxWidth: 650,
-    margin: "auto",
+    minWidth: 650,
   },
-
-  error: {
-    color: "red",
+  search: {
+    width: "350px",
+  },
+  input: {
+    height: 36,
+  },
+  toolbar: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "50px",
   },
 });
 
@@ -46,7 +53,6 @@ function DataTable(props) {
     ...rest
   } = props;
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   const tableRef = useRef(null);
 
@@ -66,13 +72,11 @@ function DataTable(props) {
 
   useEffect(() => {
     if (searchText.length !== 0) {
-      setFilter(_.filter(rows, (item) => filterFunc(item , searchText)));
+      setFilter(_.filter(rows, (item) => filterFunc(item, searchText)));
     } else {
       setFilter(rows);
     }
   }, [rows, searchText]);
-
-
 
   /// Table Function
   function scrollToView() {
@@ -103,30 +107,39 @@ function DataTable(props) {
 
   return (
     <>
-      <div>
+      <div className={classes.toolbar}>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleOpenAddForm}
+        >
+          Add
+        </Button>
         <TextField
+          className={classes.search}
           id=""
-          label="Search"
+          placeholder="Search"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           variant="outlined"
           autoComplete
+          InputProps={{
+            className: classes.input,
+            endAdornment: (
+              <InputAdornment position="end">
+                <SearchOutlined />
+              </InputAdornment>
+            ),
+          }}
         />{" "}
-        <Button onClick={handleOpenAddForm}>Add</Button>
       </div>
 
-
-      <FormDialog 
-      open={openAddForm} 
-      title="Add"
-      handleOpen={handleOpenAddForm}
-      >
+      <FormDialog open={openAddForm} title="Add" handleOpen={handleOpenAddForm}>
         <Form
-        columns={columns}
-        saveAction={addAction}
-        cancelAction={handleOpenAddForm}
-       {...rest}
-
+          columns={columns}
+          saveAction={addAction}
+          cancelAction={handleOpenAddForm}
+          {...rest}
         />
       </FormDialog>
       <TableContainer ref={tableRef} component={Paper}>
@@ -143,14 +156,13 @@ function DataTable(props) {
               .map((row) => {
                 return (
                   <Row
-                  columns={columns}
+                    columns={columns}
                     key={row.id}
                     rowId={row.id}
                     row={row}
                     onRowClick={onRowClick}
                     deleteAction={deleteAction || null}
                     editAction={editAction || null}
-
                   />
                 );
               })}

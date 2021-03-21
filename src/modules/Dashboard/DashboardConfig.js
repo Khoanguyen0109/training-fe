@@ -12,7 +12,7 @@ const DashboardConfig = {
       menu: {
         title: "Dashboard",
         path: defaultRoute,
-        icon: "",
+        icon: "dashboard",
         order: 1,
       },
     },

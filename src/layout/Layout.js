@@ -1,5 +1,6 @@
 import { CssBaseline, makeStyles } from "@material-ui/core";
 import React, { useContext, useState } from "react";
+import AppContext from "../AppContex";
 import Navbar from "./Navbar";
 import Panel from "./Panel";
 import SideBar from "./SideBar";
@@ -10,18 +11,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 function Layout({ children }) {
   const classes = useStyles();
-
-  const [open, setOpen] = useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(!open);
-  };
+  const appContext = useContext(AppContext);
+  const { openDrawer, handleDrawerOpen } = appContext;
+  console.log("appContext :>> ", appContext);
+  // const [open, setOpen] = useState(true);
+  // const handleDrawerOpen = () => {
+  //   setOpen(!open);
+  // };
 
   return (
     <div className={classes.root}>
       <CssBaseline />
 
-      <Navbar open={open} handleDrawerOpen={handleDrawerOpen} />
-      <SideBar open={open} handleDrawerOpen={handleDrawerOpen} />
+      <Navbar open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
+      <SideBar open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
       <Panel>{children}</Panel>
     </div>
   );
